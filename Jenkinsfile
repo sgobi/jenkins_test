@@ -28,7 +28,7 @@ pipeline {
                 echo "Running tests..."
                 // Add your testing steps here, for example:
                 // Run unit tests or integration tests
-                sh 'phpunit tests/'
+                sh 'my-pipeline_main tests/'
             }
         }
 
@@ -53,7 +53,7 @@ pipeline {
             steps {
                 echo "Validating pull request..."
                 // Pull request validation steps, such as running additional tests
-                sh 'phpunit tests/'
+                sh 'my-pipeline_main tests/'
             }
         }
     }
