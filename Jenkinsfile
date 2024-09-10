@@ -42,7 +42,7 @@ pipeline {
             steps {
                 echo "Deploying the application..."
                 // Deploy steps, e.g., push Docker image to a registry
-                sh 'docker-compose up -d'
+            //    sh 'docker-compose up -d'
             }
         }
 
