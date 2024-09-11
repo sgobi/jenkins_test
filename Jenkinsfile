@@ -55,7 +55,7 @@
                      sh 'git commit -am "awt"'  // Commit changes
                     
                     // // Push changes back to the repository
-                     sh 'git push origin main' 
+                     sh 'git push origin origin/main' 
                 }
             }
         }
