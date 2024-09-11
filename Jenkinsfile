@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         GIT_URL = "https://github.com/sgobi/jenkins_test.git"
-        FILE_TO_PUSH = "myfile.txt"  // File to be updated and pushed
+       // FILE_TO_PUSH = "myfile.txt"  // File to be updated and pushed
     }
 
     stages {
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 // Make some changes to the file (example)
                 echo "Updating file contents..."
-                sh "echo 'New content added at $(date)' >> ${FILE_TO_PUSH}"
+               // sh "echo 'New content added at $(date)' >> ${FILE_TO_PUSH}"
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
 
                     // List files to check if the target file exists in the workspace
                     sh 'ls -al'
-                    sh "cat ${FILE_TO_PUSH}"  // Check the contents of the modified file
+                    //sh "cat ${FILE_TO_PUSH}"  // Check the contents of the modified file
 
                     // Configure Git
                     sh 'git config --global user.email "g2k2@live.com"'
@@ -46,7 +46,7 @@ pipeline {
                     sh 'git status'  // Verify the file was added
 
                     // Commit the changes, but don't fail if there's nothing new to commit
-                    sh "git commit -m 'Automated deployment: updated poop' || true"
+                    sh "git commit -m 'Automated deployment: updated ' || true"
 
                     // Use withCredentials to safely pass GitHub credentials
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
