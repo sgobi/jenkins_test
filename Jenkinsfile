@@ -47,6 +47,16 @@ pipeline {
                     // Ensure the main branch is up to date
                     sh "git pull origin main"
 
+
+echo "pwd"
+                        // Print current directory and list files
+            sh 'pwd'
+            sh 'ls -la'
+
+                    echo "-------------------------------"
+
+                    
+
                     // Add and commit the specific file
                     sh "git add ${FILE_TO_PUSH}"  // Add the specific file
                     sh "git commit -m 'Automated commit: Pushed ${FILE_TO_PUSH} to main'"  // Commit the specific file
