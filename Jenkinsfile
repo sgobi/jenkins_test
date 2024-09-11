@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         GIT_URL = "https://github.com/sgobi/jenkins_test.git"
-        FILES_TO_MERGE = "file1.txt file2.txt myfile.txt"  // Specify the files to merge
+      //  FILES_TO_MERGE = "file1.txt file2.txt myfile.txt"  // Specify the files to merge
     }
 
     stages {
@@ -18,9 +18,9 @@ pipeline {
             steps {
                 echo "Updating the files..."
                 // Modify the specified files (example modifications)
-                sh "echo 'New content added at $(date)' >> file1.txt"
-                sh "echo 'New content added at $(date)' >> file2.txt"
-                sh "echo 'New content added at $(date)' >> myfile.txt"
+          //      sh "echo 'New content added at $(date)' >> file1.txt"
+          //      sh "echo 'New content added at $(date)' >> file2.txt"
+          //      sh "echo 'New content added at $(date)' >> myfile.txt"
             }
         }
 
@@ -43,7 +43,7 @@ pipeline {
                     sh "git pull origin main"
 
                     // Add the modified files
-                    sh "git add ${FILES_TO_MERGE}"
+                    sh "git add ."
 
                     // Commit the changes; this will not fail the pipeline if there are no changes
                     sh "git commit -m 'Automated deployment: merged changes' || true"
