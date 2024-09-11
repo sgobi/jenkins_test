@@ -50,7 +50,7 @@
                   sh  ' git branch -u origin/main'
                     // // Add, commit, and push the file(s)
                      sh 'git add .'             // Add all files
-                     sh 'git commit -m "awt"'  // Commit changes
+                     sh 'git commit -am "awt"'  // Commit changes
                     
                     // // Push changes back to the repository
                     // sh 'git push origin main' 
