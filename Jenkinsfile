@@ -51,7 +51,7 @@
 
                //  sh 'git checkout --orphan main'
                     // // Add, commit, and push the file(s)
-                     sh 'git add -A '             // Add all files
+                     sh 'git add . '             // Add all files
                      sh 'git commit -am "awt"'  // Commit changes
                     
                     // // Push changes back to the repository
