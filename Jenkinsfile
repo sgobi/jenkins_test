@@ -52,7 +52,7 @@
                //  sh 'git checkout --orphan main'
                     // // Add, commit, and push the file(s)
                      sh 'git add . '             // Add all files
-                     sh 'git commit -am "awt"'  // Commit changes
+                     sh ' git commit -a -m "Changes pushed by Jenkins" || true'  // Commit changes
                     
                     // // Push changes back to the repository
                      sh 'git push origin origin/main' 
