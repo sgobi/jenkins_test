@@ -1,4 +1,4 @@
- pipeline {
+pipeline {
     agent any
 
     environment {
@@ -27,8 +27,6 @@
             steps {
                 echo "Running tests..."
                 // Add your testing steps here
-                // For example, run unit tests or integration tests
-                //sh './run_tests.sh'
             }
         }
 
@@ -42,25 +40,21 @@
             steps {
                 script {
                     echo "Deploying the application..."
-                //    sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
-                //    sh 'git config --global user.name "${GIT_USERNAME}"'   
-                    // Set Git user name
-                echo "pulling "
-                    // Ensure the workspace is up to date
-                 //    sh 'git pull origin main'  // Pull the latest changes
-                  sh  ' git branch -u origin/main'
-
-               //  sh 'git checkout --orphan main'
-                    // // Add, commit, and push the file(s)
-                     sh 'git add . '             // Add all files
-                     sh ' git commit -a -m "Changes pushed by Jenkins" || true'  // Commit changes
+                    sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
+                    sh 'git config --global user.name "sgobi"'            // Set Git user name
                     
-                    // // Push changes back to the repository
-                   //  sh 'git push origin main' 
- // Use the stored credentials to push changes
+                    // Ensure the workspace is up to date
+                    sh 'git pull origin main'  // Pull the latest changes
+                    
+                    // Add, commit, and push the file(s)
+                    sh 'git add .'             // Add all files
+                    sh 'git commit -a -m "Automated deployment: added my1"'  // Commit changes
+
+                    // Use the stored credentials to push changes
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main'
                     }
+                }
             }
         }
 
@@ -70,8 +64,7 @@
             }
             steps {
                 echo "Validating pull request..."
-                // Add your pull request validation steps, such as running additional tests
-                //sh './run_tests.sh'
+                // Add your pull request validation steps
             }
         }
     }
