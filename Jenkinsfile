@@ -33,26 +33,38 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            when {
-                allOf {
-                    branch 'main'   // Only deploy on pushes to the main branch
-                    not { changeRequest() } // Not a pull request
-                }
-            }
-            steps {
-                echo "Deploying the application..."
 
-                cd "${WORKSPACE}"
-git status # should show <file> as changed or unversioned
 
-git add <file>
-git commit -m "Added file with automated Jenikins job"
-git push
-                // Deploy steps, e.g., push Docker image to a registry
-            //    sh 'docker-compose up -d'
-            }
+stage('Deploy') {
+    when {
+        allOf {
+            branch 'main'   // Only deploy on pushes to the main branch
+            not { changeRequest() } // Not a pull request
         }
+    }
+    steps {
+        script {
+            echo "Deploying the application..."
+            sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
+            sh 'git config --global user.name "sgobi "'                   // Set Git user name
+            
+            // Ensure the workspace is up to date
+            sh 'git pull origin main'
+            
+            // Add, commit, and push the file
+            sh 'git add .'     // Replace <file> with the actual file path
+            sh 'git commit -m "Automated deployment: added <file>"'  // Replace <file> or customize the message
+            sh 'git push origin main'  // Push changes back to the repository
+        }
+    }
+}
+
+
+
+
+
+
+        
 
         stage('Pull Request Validation') {
             when {
