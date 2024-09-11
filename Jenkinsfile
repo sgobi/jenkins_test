@@ -42,8 +42,8 @@
             steps {
                 script {
                     echo "Deploying the application..."
-                    sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
-                    sh 'git config --global user.name "${GIT_USERNAME}"'   
+                //    sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
+                //    sh 'git config --global user.name "${GIT_USERNAME}"'   
                     // Set Git user name
                 echo "pulling "
                     // Ensure the workspace is up to date
