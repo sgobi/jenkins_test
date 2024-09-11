@@ -47,7 +47,7 @@
                 echo "pulling "
                     // Ensure the workspace is up to date
                      sh 'git pull origin main'  // Pull the latest changes
-                  sh  ' git branch -u origin/master'
+                  sh  ' git branch -u origin/main'
                     // // Add, commit, and push the file(s)
                      sh 'git add .'             // Add all files
                      sh 'git commit -m "awt"'  // Commit changes
