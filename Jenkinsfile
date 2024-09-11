@@ -48,6 +48,8 @@
                     // Ensure the workspace is up to date
                      sh 'git pull origin main'  // Pull the latest changes
                  // sh  ' git branch -u origin/main'
+
+                 sh 'git checkout --orphan main'
                     // // Add, commit, and push the file(s)
                      sh 'git add -A '             // Add all files
                      sh 'git commit -am "awt"'  // Commit changes
