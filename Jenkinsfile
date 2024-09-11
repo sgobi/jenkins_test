@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         GIT_URL = "https://github.com/sgobi/jenkins_test.git"
-        FILE_TO_PUSH = "myfile.txt"  // Replace with the path of the file you want to push
+        FILE_TO_PUSH = "myfile.txt"  // File to be updated and pushed
     }
 
     stages {
@@ -14,27 +14,17 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            when {
-                not { changeRequest() } // Only build on push events
-            }
+        stage('Modify File') {
             steps {
-                echo "Building the application on push..."
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo "Running tests..."
+                // Make some changes to the file (example)
+                echo "Updating file contents..."
+                sh "echo 'New content added at $(date)' >> ${FILE_TO_PUSH}"
             }
         }
 
         stage('Deploy') {
             when {
-                allOf {
-                    branch 'main'   // Only deploy on the main branch
-                    not { changeRequest() } // Exclude pull requests
-                }
+                branch 'main'   // Only deploy on the main branch
             }
             steps {
                 script {
@@ -42,8 +32,9 @@ pipeline {
 
                     // List files to check if the target file exists in the workspace
                     sh 'ls -al'
+                    sh "cat ${FILE_TO_PUSH}"  // Check the contents of the modified file
 
-                    // Configure git
+                    // Configure Git
                     sh 'git config --global user.email "g2k2@live.com"'
                     sh 'git config --global user.name "sgobi"'
 
@@ -51,29 +42,20 @@ pipeline {
                     sh "git pull origin main"
 
                     // Add and commit the specific file
-                    sh "git add ."  // Ensure the file exists
+                    sh "git add ."  // Ensure the file is staged
                     sh 'git status'  // Verify the file was added
 
                     // Commit the changes, but don't fail if there's nothing new to commit
-                    sh "git commit -m 'Automated deployment: added poo' || true"
+                    sh "git commit -m 'Automated deployment: updated poop' || true"
 
                     // Use withCredentials to safely pass GitHub credentials
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        // Push the changes and show verbose output for debugging
+                        // Push the changes
                         sh '''
                             git push -v https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main
                         '''
                     }
                 }
-            }
-        }
-
-        stage('Pull Request Validation') {
-            when {
-                changeRequest()  // Run this stage for pull requests only
-            }
-            steps {
-                echo "Validating pull request..."
             }
         }
     }
