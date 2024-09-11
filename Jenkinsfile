@@ -8,8 +8,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code
-                checkout scm
+                // Checkout the code from the specified repository and branch
+                git url: "${GIT_URL}", branch: 'main'
             }
         }
 
@@ -26,48 +26,37 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running tests..."
-                
-                // Add your testing steps here, for example:
-                // Run unit tests or integration tests
-                //sh 'my-pipeline_main tests/'
+                // Add your testing steps here
+                // For example, run unit tests or integration tests
+                //sh './run_tests.sh'
             }
         }
 
-
-
-stage('Deploy') {
-    when {
-        allOf {
-            branch 'main'   // Only deploy on pushes to the main branch
-            not { changeRequest() } // Not a pull request
+        stage('Deploy') {
+            when {
+                allOf {
+                    branch 'main'   // Only deploy on pushes to the main branch
+                    not { changeRequest() } // Not a pull request
+                }
+            }
+            steps {
+                script {
+                    echo "Deploying the application..."
+                    sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
+                    sh 'git config --global user.name "sgobi"'            // Set Git user name
+                    
+                    // Ensure the workspace is up to date
+                    sh 'git pull origin main'  // Pull the latest changes
+                    
+                    // Add, commit, and push the file(s)
+                    sh 'git add .'             // Add all files
+                    sh 'git commit -m "Automated deployment: added my1"'  // Commit changes
+                    
+                    // Push changes back to the repository
+                    sh 'git push origin main' 
+                }
+            }
         }
-    }
-    steps {
-        script {
-            echo "Deploying the application..."
-            sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
-            sh 'git config --global user.name "sgobi "'                   // Set Git user name
-            
-            // Ensure the workspace is up to date
-            sh 'git pull origin main'
-            
-            // Add, commit, and push the file
-            sh 'git add .'     // Replace <file> with the actual file path
-            sh 'git commit -m "Automated deployment: added my1"'  // Replace <file> or customize the message
-// If in detached HEAD, switch back to the main branch
-sh 'git checkout main'
-            
-            sh 'git push origin main'  // Push changes back to the repository
-        }
-    }
-}
-
-
-
-
-
-
-        
 
         stage('Pull Request Validation') {
             when {
@@ -75,8 +64,8 @@ sh 'git checkout main'
             }
             steps {
                 echo "Validating pull request..."
-                // Pull request validation steps, such as running additional tests
-           //     sh 'my-pipeline_main tests/'
+                // Add your pull request validation steps, such as running additional tests
+                //sh './run_tests.sh'
             }
         }
     }
