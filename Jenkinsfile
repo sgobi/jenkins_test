@@ -45,7 +45,8 @@ pipeline {
                     
                     // Ensure the workspace is up to date
                     sh 'git pull origin main'  // Pull the latest changes
-                    
+                                 // Checkout the target branch
+                    sh 'git checkout main'
                     // Add, commit, and push the file(s)
                     sh 'git add .'             // Add all files
                     sh 'git commit -a -m "Changes pushed by Jenkins" || true'  // Commit changes
