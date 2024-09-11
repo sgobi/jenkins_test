@@ -20,71 +20,53 @@ pipeline {
             }
             steps {
                 echo "Building the application on push..."
-                // Add build steps, e.g., Docker build or PHP build
             }
         }
 
         stage('Test') {
             steps {
                 echo "Running tests..."
-                // Add your testing steps here
             }
         }
 
-stage('Deploy') {
-    when {
-        allOf {
-            branch 'main'   // Only deploy on the main branch
-            not { changeRequest() } // Not a pull request
-        }
-    }
-    steps {
-        script {
-            echo "Deploying the application..."
-            sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
-            sh 'git config --global user.name "sgobi"'            // Set Git user name
+        stage('Deploy') {
+            when {
+                allOf {
+                    branch 'main'   // Only deploy on the main branch
+                    not { changeRequest() } // Exclude pull requests
+                }
+            }
+            steps {
+                script {
+                    echo "Deploying the application..."
 
-            // Ensure the main branch is up to date
-            sh "git pull origin main"
+                    // List files to check if the target file exists in the workspace
+                    sh 'ls -al'
 
-            // Add and commit the specific file
-            sh "git add ."  // Replace with actual file to be added
-            sh "git commit -m -a 'Automated deployment: added myfile.txt'||true"
-        //    sh "git push origin main"
+                    // Configure git
+                    sh 'git config --global user.email "g2k2@live.com"'
+                    sh 'git config --global user.name "sgobi"'
 
-            // Use withCredentials block to safely pass GitHub credentials
-            withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                sh '''
-                    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main
-                '''
+                    // Pull the latest changes from the main branch
+                    sh "git pull origin main"
+
+                    // Add and commit the specific file
+                    sh "git add ."  // Ensure the file exists
+                    sh 'git status'  // Verify the file was added
+
+                    // Commit the changes, but don't fail if there's nothing new to commit
+                    sh "git commit -m 'Automated deployment: added poo' || true"
+
+                    // Use withCredentials to safely pass GitHub credentials
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        // Push the changes and show verbose output for debugging
+                        sh '''
+                            git push -v https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main
+                        '''
+                    }
+                }
             }
         }
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 
         stage('Pull Request Validation') {
             when {
