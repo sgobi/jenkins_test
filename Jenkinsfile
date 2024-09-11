@@ -56,7 +56,7 @@
                      sh ' git commit -a -m "Changes pushed by Jenkins" || true'  // Commit changes
                     
                     // // Push changes back to the repository
-                     sh 'git push origin origin/main' 
+                     sh 'git push origin main' 
                 }
             }
         }
