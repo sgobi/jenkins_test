@@ -50,7 +50,7 @@ pipeline {
                     
                     // Add, commit, and push the file(s)
                     sh 'git add .'             // Add all files
-                    sh 'git commit -m "Automated deployment: added my1"'  // Commit changes
+                    sh 'git commit -m "awt"'  // Commit changes
                     
                     // Push changes back to the repository
                     sh 'git push origin main' 
