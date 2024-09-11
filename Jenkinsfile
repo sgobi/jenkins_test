@@ -26,6 +26,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running tests..."
+                
                 // Add your testing steps here, for example:
                 // Run unit tests or integration tests
                 //sh 'my-pipeline_main tests/'
@@ -41,6 +42,13 @@ pipeline {
             }
             steps {
                 echo "Deploying the application..."
+
+                cd "${WORKSPACE}"
+git status # should show <file> as changed or unversioned
+
+git add <file>
+git commit -m "Added file with automated Jenikins job"
+git push
                 // Deploy steps, e.g., push Docker image to a registry
             //    sh 'docker-compose up -d'
             }
