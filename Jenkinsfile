@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
     agent any
 
     environment {
@@ -44,16 +44,16 @@ pipeline {
                     echo "Deploying the application..."
                     sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
                     sh 'git config --global user.name "sgobi"'            // Set Git user name
-                    
+                echo "pulling "
                     // Ensure the workspace is up to date
-                    sh 'git pull origin main'  // Pull the latest changes
+                    // sh 'git pull origin main'  // Pull the latest changes
                     
-                    // Add, commit, and push the file(s)
-                    sh 'git add .'             // Add all files
-                    sh 'git commit -m "awt"'  // Commit changes
+                    // // Add, commit, and push the file(s)
+                    // sh 'git add .'             // Add all files
+                    // sh 'git commit -m "awt"'  // Commit changes
                     
-                    // Push changes back to the repository
-                    sh 'git push origin main' 
+                    // // Push changes back to the repository
+                    // sh 'git push origin main' 
                 }
             }
         }
