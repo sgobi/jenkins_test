@@ -50,7 +50,7 @@ stage('Deploy') {
             // Add and commit the specific file
             sh "git add ."  // Replace with actual file to be added
             sh "git commit -m -a 'Automated deployment: added myfile.txt'||true"
-            sh "git push origin main"
+        //    sh "git push origin main"
 
             // Use withCredentials block to safely pass GitHub credentials
             withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
