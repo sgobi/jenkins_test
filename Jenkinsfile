@@ -48,7 +48,7 @@ pipeline {
                     
                     // Add, commit, and push the file(s)
                     sh 'git add .'             // Add all files
-                    sh 'git commit -a -m "Automated deployment: added my1"'  // Commit changes
+                    sh 'git commit -a -m "Automated deployment: added my1" || true'  // Commit changes
 
                     // Use the stored credentials to push changes
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
