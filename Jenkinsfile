@@ -48,7 +48,7 @@ stage('Deploy') {
             sh "git pull origin main"
 
             // Add and commit the specific file
-            sh "git add myfile.txt"  // Replace with actual file to be added
+            sh "git add ."  // Replace with actual file to be added
             sh "git commit -m -a 'Automated deployment: added myfile.txt'||true"
 
             // Use withCredentials block to safely pass GitHub credentials
