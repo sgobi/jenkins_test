@@ -46,8 +46,8 @@
                     sh 'git config --global user.name "sgobi"'            // Set Git user name
                 echo "pulling "
                     // Ensure the workspace is up to date
-                     sh 'git pull origin main'  // Pull the latest changes
-                 // sh  ' git branch -u origin/main'
+                 //    sh 'git pull origin main'  // Pull the latest changes
+                  sh  ' git branch -u origin/main'
 
                  sh 'git checkout --orphan main'
                     // // Add, commit, and push the file(s)
