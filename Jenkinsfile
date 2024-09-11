@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         GIT_URL = "https://github.com/sgobi/jenkins_test.git"
-       // FILE_TO_PUSH = "myfile.txt"  // File to be updated and pushed
+        FILES_TO_MERGE = "file1.txt file2.txt myfile.txt"  // Specify the files to merge
     }
 
     stages {
@@ -14,25 +14,26 @@ pipeline {
             }
         }
 
-        stage('Modify File') {
+        stage('Modify Files') {
             steps {
-                // Make some changes to the file (example)
-                echo "Updating file contents..."
-               // sh "echo 'New content added at $(date)' >> ${FILE_TO_PUSH}"
+                echo "Updating the files..."
+                // Modify the specified files (example modifications)
+                sh "echo 'New content added at $(date)' >> file1.txt"
+                sh "echo 'New content added at $(date)' >> file2.txt"
+                sh "echo 'New content added at $(date)' >> myfile.txt"
             }
         }
 
         stage('Deploy') {
             when {
-                branch 'main'   // Only deploy on the main branch
+                branch 'main'  // Only deploy on the main branch
             }
             steps {
                 script {
                     echo "Deploying the application..."
 
-                    // List files to check if the target file exists in the workspace
+                    // List files to verify that the target files exist in the workspace
                     sh 'ls -al'
-                    //sh "cat ${FILE_TO_PUSH}"  // Check the contents of the modified file
 
                     // Configure Git
                     sh 'git config --global user.email "g2k2@live.com"'
@@ -41,12 +42,11 @@ pipeline {
                     // Pull the latest changes from the main branch
                     sh "git pull origin main"
 
-                    // Add and commit the specific file
-                    sh "git add ."  // Ensure the file is staged
-                    sh 'git status'  // Verify the file was added
+                    // Add the modified files
+                    sh "git add ${FILES_TO_MERGE}"
 
-                    // Commit the changes, but don't fail if there's nothing new to commit
-                    sh "git commit -m 'Automated deployment: updated ' || true"
+                    // Commit the changes; this will not fail the pipeline if there are no changes
+                    sh "git commit -m 'Automated deployment: merged changes' || true"
 
                     // Use withCredentials to safely pass GitHub credentials
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
