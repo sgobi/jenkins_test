@@ -63,8 +63,8 @@ echo "pwd"
 
                     // Use the stored credentials to push changes
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh "git push https://g2k2@live.com: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@github.com/sgobi/jenkins_test.git main"
-                        //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main"
+                     //   sh "git push https://g2k2@live.com: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@github.com/sgobi/jenkins_test.git main"
+                       sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main"
                     }
                 }
             }
