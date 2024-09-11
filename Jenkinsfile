@@ -49,7 +49,7 @@
                      sh 'git pull origin main'  // Pull the latest changes
                     
                     // // Add, commit, and push the file(s)
-                    // sh 'git add .'             // Add all files
+                     sh 'git add .'             // Add all files
                     // sh 'git commit -m "awt"'  // Commit changes
                     
                     // // Push changes back to the repository
