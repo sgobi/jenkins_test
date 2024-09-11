@@ -3,12 +3,13 @@ pipeline {
 
     environment {
         GIT_URL = "https://github.com/sgobi/jenkins_test.git"
+        FILE_TO_PUSH = "myfile.txt"  // Replace with the path of the file you want to push
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the specified repository and branch
+                // Checkout the main branch
                 git url: "${GIT_URL}", branch: 'main'
             }
         }
@@ -33,7 +34,7 @@ pipeline {
         stage('Deploy') {
             when {
                 allOf {
-                    branch 'main'   // Only deploy on pushes to the main branch
+                    branch 'main'   // Only deploy on the main branch
                     not { changeRequest() } // Not a pull request
                 }
             }
@@ -42,18 +43,17 @@ pipeline {
                     echo "Deploying the application..."
                     sh 'git config --global user.email "g2k2@live.com"'   // Set Git user email
                     sh 'git config --global user.name "sgobi"'            // Set Git user name
-                    
-                    // Ensure the workspace is up to date
-                    sh 'git pull origin main'  // Pull the latest changes
-                                 // Checkout the target branch
-                    sh 'git checkout main'
-                    // Add, commit, and push the file(s)
-                    sh 'git add .'             // Add all files
-                    sh 'git commit -a -m "Changes pushed by Jenkins" || true'  // Commit changes
+
+                    // Ensure the main branch is up to date
+                    sh "git pull origin main"
+
+                    // Add and commit the specific file
+                    sh "git add ${FILE_TO_PUSH}"  // Add the specific file
+                    sh "git commit -m 'Automated commit: Pushed ${FILE_TO_PUSH} to main'"  // Commit the specific file
 
                     // Use the stored credentials to push changes
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main'
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main"
                     }
                 }
             }
@@ -65,14 +65,12 @@ pipeline {
             }
             steps {
                 echo "Validating pull request..."
-                // Add your pull request validation steps
             }
         }
     }
 
     post {
         always {
-            // Post-build actions, such as cleaning up or sending notifications
             echo "Cleaning up..."
         }
         success {
