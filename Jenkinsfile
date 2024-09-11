@@ -56,8 +56,11 @@
                      sh ' git commit -a -m "Changes pushed by Jenkins" || true'  // Commit changes
                     
                     // // Push changes back to the repository
-                     sh 'git push origin main' 
-                }
+                   //  sh 'git push origin main' 
+ // Use the stored credentials to push changes
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh 'git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main'
+                    }
             }
         }
 
