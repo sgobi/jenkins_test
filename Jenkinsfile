@@ -54,6 +54,9 @@ stage('Deploy') {
             // Add, commit, and push the file
             sh 'git add .'     // Replace <file> with the actual file path
             sh 'git commit -m "Automated deployment: added my1"'  // Replace <file> or customize the message
+# If in detached HEAD, switch back to the main branch
+sh 'git checkout main'
+            
             sh 'git push origin main'  // Push changes back to the repository
         }
     }
