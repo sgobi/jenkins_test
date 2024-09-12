@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Set the Vault address and token to interact with Vault
-        VAULT_ADDR = 'http://vault:8200'
+        VAULT_ADDR = 'http://192.168.1.126:8200'
         VAULT_TOKEN = credentials('vault-token-id') // Jenkins Credential ID for Vault token
         GIT_CREDENTIALS = credentials('git-credentials-id') // Jenkins Credential ID for Git credentials
     }
