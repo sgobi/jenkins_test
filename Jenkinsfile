@@ -2,73 +2,62 @@ pipeline {
     agent any
 
     environment {
-        GIT_URL = "https://github.com/sgobi/jenkins_test.git"
-      //  FILES_TO_MERGE = "file1.txt file2.txt myfile.txt"  // Specify the files to merge
+        // Set the Vault address and token to interact with Vault
+        VAULT_ADDR = 'http://vault:8200'
+        VAULT_TOKEN = credentials('vault-token-id') // Jenkins Credential ID for Vault token
+        GIT_CREDENTIALS = credentials('git-credentials-id') // Jenkins Credential ID for Git credentials
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                // Checkout the main branch
-                git url: "${GIT_URL}", branch: 'main'
+                // Checkout the code from the Git repository using the credentials stored in Jenkins
+                git branch: 'main',
+                    url: 'https://github.com/your-repo.git',
+                    credentialsId: 'git-credentials-id'
             }
         }
 
-        stage('Modify Files') {
+        stage('Retrieve Secrets from Vault') {
             steps {
-                echo "Updating the files..."
-                // Modify the specified files (example modifications)
-          //      sh "echo 'New content added at $(date)' >> file1.txt"
-          //      sh "echo 'New content added at $(date)' >> file2.txt"
-          //      sh "echo 'New content added at $(date)' >> myfile.txt"
+                script {
+                    // Fetch secret data from HashiCorp Vault
+                    // Assuming there's a secret stored at secret/myapp/config in Vault
+                    def secretUsername = sh(script: 'vault kv get -field=username secret/myapp/config', returnStdout: true).trim()
+                    def secretPassword = sh(script: 'vault kv get -field=password secret/myapp/config', returnStdout: true).trim()
+                    
+                    // Print the retrieved secrets (avoid printing sensitive data in real-world scenarios)
+                    echo "Retrieved secret username: ${secretUsername}"
+                    echo "Retrieved secret password: ${secretPassword}"
+                    
+                    // Set retrieved secrets to environment variables for later use
+                    env.SECRET_USERNAME = secretUsername
+                    env.SECRET_PASSWORD = secretPassword
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Simulate a build step that uses the secrets retrieved from Vault
+                echo "Using Vault secrets for the build..."
+                echo "Username: ${env.SECRET_USERNAME}"
+                // Do not print sensitive values like passwords
             }
         }
 
         stage('Deploy') {
-            when {
-                branch 'main'  // Only deploy on the main branch
-            }
             steps {
-                script {
-                    echo "Deploying the application..."
-
-                    // List files to verify that the target files exist in the workspace
-                    sh 'ls -al'
-
-                    // Configure Git
-                    sh 'git config --global user.email "g2k2@live.com"'
-                    sh 'git config --global user.name "sgobi"'
-
-                    // Pull the latest changes from the main branch
-                    sh "git pull origin main"
-
-                    // Add the modified files
-                    sh "git add ."
-
-                    // Commit the changes; this will not fail the pipeline if there are no changes
-                    sh "git commit -m 'Automated deployment: merged changes' || true"
-
-                    // Use withCredentials to safely pass GitHub credentials
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        // Push the changes
-                        sh '''
-                            git push -v https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/sgobi/jenkins_test.git main
-                        '''
-                    }
-                }
+                // Simulate a deployment step where secrets might be needed
+                echo "Deploying application using the Vault-protected secrets..."
             }
         }
     }
 
     post {
         always {
-            echo "Cleaning up..."
-        }
-        success {
-            echo "Build successful!"
-        }
-        failure {
-            echo "Build failed!"
+            // Clean up or notify at the end of the pipeline
+            echo "Pipeline completed."
         }
     }
 }
