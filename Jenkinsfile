@@ -2,6 +2,8 @@ opipeline {
     agent any
 
     environment {
+                        echo "enviroment branch-----------------------------------------------------------------------------------------------------------------------------------"
+
         // Set the Vault address and token to interact with Vault
         VAULT_ADDR = 'http://192.168.1.126:8200'
         VAULT_TOKEN = credentials('vault-token-id') // Jenkins Credential ID for Vault token
@@ -11,6 +13,8 @@ opipeline {
     stages {
         stage('Checkout Code') {
             steps {
+                                echo "check out branch-----------------------------------------------------------------------------------------------------------------------------------"
+
                 // Checkout the code from the Git repository using the credentials stored in Jenkins
                 git branch: 'hashi',
                     url: 'https://github.com/your-repo.git',
