@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Checkout the code from the Git repository using the credentials stored in Jenkins
-                git branch: 'main',
+                git branch: 'hashi',
                     url: 'https://github.com/your-repo.git',
                     credentialsId: 'git-credentials-id'
             }
