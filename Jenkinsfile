@@ -1,4 +1,4 @@
-pipeline {
+opipeline {
     agent any
 
     environment {
@@ -15,12 +15,15 @@ pipeline {
                 git branch: 'hashi',
                     url: 'https://github.com/your-repo.git',
                     credentialsId: 'git-credentials-id'
+                echo "hashi branch-----------------------------------------------------------------------------------------------------------------------------------"
             }
         }
 
         stage('Retrieve Secrets from Vault') {
             steps {
                 script {
+                                    echo "retrivr start branch-----------------------------------------------------------------------------------------------------------------------------------"
+
                     // Fetch secret data from HashiCorp Vault
                     // Assuming there's a secret stored at secret/myapp/config in Vault
                     def secretUsername = sh(script: 'vault kv get -field=username secret/myapp/config', returnStdout: true).trim()
@@ -33,16 +36,22 @@ pipeline {
                     // Set retrieved secrets to environment variables for later use
                     env.SECRET_USERNAME = secretUsername
                     env.SECRET_PASSWORD = secretPassword
+                                    echo "retrive end  branch-----------------------------------------------------------------------------------------------------------------------------------"
+
                 }
             }
         }
 
         stage('Build') {
             steps {
+                                echo "build start branch-----------------------------------------------------------------------------------------------------------------------------------"
+
                 // Simulate a build step that uses the secrets retrieved from Vault
                 echo "Using Vault secrets for the build..."
                 echo "Username: ${env.SECRET_USERNAME}"
                 // Do not print sensitive values like passwords
+                                echo "build end branch-----------------------------------------------------------------------------------------------------------------------------------"
+
             }
         }
 
